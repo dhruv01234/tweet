@@ -45,7 +45,7 @@ export default defineComponent({
     handleTweetDeleted(tweetId) {
       this.Tweets = this.Tweets.filter(tweet => tweet.id !== tweetId);
     },
-   
+
     fetchTweets() {
       const db = getFirestore(app);
       const userRef = doc(db, 'users', this.user.uid);
@@ -92,16 +92,20 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.body {
+  .Tweets {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     flex-grow: 1;
     padding: 5%;
-  }
-  .Tweets {
-    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
   }
   .tweet-card {
     margin: 10px;

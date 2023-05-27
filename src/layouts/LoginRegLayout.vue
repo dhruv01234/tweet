@@ -38,4 +38,13 @@ img{
 .avatar-container{
   width: 30%;
 }
+@media (max-width: 727px) {
+  .avatar-container {
+    display: none;
+  }
+
+  .form {
+    width: 80%;
+  }
+}
 </style>

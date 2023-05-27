@@ -195,6 +195,7 @@ getLikeIcon(tweetId) {
 .tweetcard {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 .tweet-likes {
   display: flex;
@@ -206,6 +207,8 @@ getLikeIcon(tweetId) {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  padding: 10px;
 }
 
 .content {
@@ -217,6 +220,9 @@ getLikeIcon(tweetId) {
   justify-content: space-between;
   background-color: #1976d2;
   margin-left: 5px;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  text-align: center;
 }
 .tweet-footer {
   background-color: #e7ecf691;
@@ -224,16 +230,17 @@ getLikeIcon(tweetId) {
   justify-content: space-between;
   height: max-content;
   padding: 5px;
-}
-.tweet-message {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  overflow: hidden;
+  margin-top: auto;
 }
 .tweet-author {
   overflow-wrap: break-word;
   word-wrap: break-word;
+  word-break: break-word;
   max-width: 100%;
   margin: auto;
+}
+.delete-button {
+  align-self: flex-end;
+  margin-top: auto;
 }
 </style>

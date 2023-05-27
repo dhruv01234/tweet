@@ -11,33 +11,35 @@
         </div>
       </div>
       <div v-else>No Tweets yet</div>
-      <div class="sendTweet">
-        <q-input
-          rounded
-          filled
-          v-model="tweet"
-          label="Tweet here"
-          class="tweetbox"
-          style="width:80%"
-          @keydown.enter="sendTweet"
-        >
-          <template v-slot:before>
-            <q-avatar>
-              <img src="../assets/avatar.jpg" />
-            </q-avatar>
-          </template>
-        </q-input>
-        <q-btn
-          v-if="tweet"
-          round
-          dense
-          flat
-          icon="send"
-          @click="sendTweet"
-          class="send"
-          :loading="loadingsend"
-        />
-      </div>
+      <q-footer class="footer">
+        <div class="sendTweet">
+          <q-input
+            rounded
+            filled
+            v-model="tweet"
+            label="Tweet here"
+            class="tweetbox"
+            style="width:80%"
+            @keydown.enter="sendTweet"
+          >
+            <template v-slot:before>
+              <q-avatar>
+                <img src="../assets/avatar.jpg" />
+              </q-avatar>
+            </template>
+          </q-input>
+          <q-btn
+            v-if="tweet"
+            round
+            dense
+            flat
+            icon="send"
+            @click="sendTweet"
+            class="send"
+            :loading="loadingsend"
+          />
+        </div>
+      </q-footer>
     </div>
   </q-page>
   <q-dialog v-else v-model="loadingDialog" persistent>
@@ -148,14 +150,28 @@ export default defineComponent({
 })
 </script>
 <style scoped>
+.footer{
+  padding: 7px;
+  background-color: antiquewhite;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.tweetbox{
 
-
+}
   .tweet-card {
     margin: 10px;
     width: 100%;
   }
   .Tweets {
     width: 100%;
+  overflow-x: hidden;
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
   }
   .logout-details {
     width: max-content;
@@ -168,6 +184,8 @@ export default defineComponent({
     align-items: center;
     flex-grow: 1;
     padding: 5%;
+    max-width: 100%;
+    overflow-x: hidden;
   }
   .send:hover {
     color: #1976d2;
@@ -175,5 +193,13 @@ export default defineComponent({
   .sendTweet {
     display: flex;
     width: 80%;
+    flex-wrap: wrap;
+    
+  }
+  @media (max-width: 450px) {
+
+    .sendTweet {
+      width: 100%;
+    }
   }
 </style>

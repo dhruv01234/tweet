@@ -12,33 +12,53 @@
         />
         <q-toolbar-title> Tweet me </q-toolbar-title>
 
-        <div>
+        <div class="hide">
           <q-btn v-if="user" @click="logout" color="amber" label="Logout"></q-btn>
         </div>
       </q-toolbar>
     </q-header>
 
-    <q-drawer class="bg-blue q-pa-xs" v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list class="q-pa-sm"  v-if="user">
-        <div class="text-center">
-          <q-avatar class="avatar q-ma-sm " color="primary" size="lg" style="width: 50px; margin: 0 auto;">
-            <img src="../assets/avatar.jpg" />
-          </q-avatar>
-          <q-card class="profile q-pa-sm q-ma-sm">{{ username }}</q-card>
-          <q-item-label header> <q-btn color="amber" label="Your Profile" to="/profile"></q-btn> </q-item-label>
-        </div>
-        <hr class="seperator">
-        <q-card @click="home" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'home' }">Dashboard</q-card>
-        <q-card @click="followers" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'followers' }">Your Followers</q-card>
-        <q-card @click="mytweets" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'myTweets' }">Your Tweeets</q-card>
-      </q-list>
-      <q-list v-else>
-        <br>
-        <q-card class="q-pa-sm"><q-btn class="full" color="amber" label="Sign in" to="/page/login"></q-btn></q-card>
-        <br>
-        <q-card class="q-pa-sm"><q-btn class="full" color="amber" label="Sign up" to="/page/register"></q-btn></q-card>
-        <!-- Rest of the code -->
-      </q-list>
+    <q-drawer class="bg-blue q-pa-xs drawer"
+    v-model="leftDrawerOpen"
+    show-if-above
+    bordered
+    >
+    <q-toolbar class="drawer-toolbar">
+      <q-btn
+        flat
+        dense
+        round
+        icon="menu"
+        aria-label="Menu"
+        @click="toggleLeftDrawer"
+      />
+      <q-toolbar-title> Tweet me </q-toolbar-title>
+    </q-toolbar>
+<q-scroll-area class="fit">
+  <q-list class="q-pa-sm absolute-top"  v-if="user">
+    <q-img class="" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+      <div class="absolute-bottom bg-transparent">
+        <q-avatar size="56px" class="q-mb-sm">
+          <img src="../assets/avatar.jpg">
+        </q-avatar>
+        <div class="text-weight-bold">{{username}}</div>
+        <div><q-btn color="amber" label="Your Profile" to="/profile"></q-btn></div>
+      </div>
+    </q-img>
+    <hr class="seperator">
+    <q-card @click="home" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'home' }">Dashboard</q-card>
+    <q-card @click="followers" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'followers' }">Your Followers</q-card>
+    <q-card @click="mytweets" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'myTweets' }">Your Tweeets</q-card>
+    <q-card class="q-pa-sm q-ma-sm drawer-items limit"><q-btn class="full" color="amber" label="Logout" to="/page/register"></q-btn></q-card>
+  </q-list>
+  <q-list v-else>
+    <br>
+    <q-card class="q-pa-sm"><q-btn class="full" color="amber" label="Sign in" to="/page/login"></q-btn></q-card>
+    <br>
+    <q-card class="q-pa-sm"><q-btn class="full" color="amber" label="Sign up" to="/page/register"></q-btn></q-card>
+
+  </q-list>
+</q-scroll-area>
     </q-drawer>
 
     <q-page-container>
@@ -157,9 +177,6 @@ export default defineComponent({
   width:100%;
   height: 100%;
 }
-.profile{
-
-}
 
 .drawer-items:hover{
   transition: 1s;
@@ -171,5 +188,27 @@ export default defineComponent({
   width: 100%;
   height: 2px;
   color: aliceblue;
+}
+.limit{
+  display: none;
+}
+@media (max-width: 450px) {
+  .hide {
+    display: none;
+  }
+
+  .limit {
+    display: block;
+  }
+}
+
+.drawer {
+  width: 200px;
+}
+
+@media (max-width: 450px) {
+  .drawer {
+    width: 150px;
+  }
 }
 </style>
