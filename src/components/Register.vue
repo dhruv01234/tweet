@@ -4,13 +4,21 @@
       <q-card class="regCard">Welcome! to Tweets World</q-card>
       <br>
       <q-input
+        type="text"
+        rounded
+        standout="bg-teal text-white"
+        v-model="username"
+        label="Username"
+        required
+      />
+      <br>
+      <q-input
         type="email"
         rounded
         standout="bg-teal text-white"
         v-model="email"
         label="Email"
         required
-        :rules="[emailRule]"
       />
       <br>
       <q-input
@@ -20,7 +28,6 @@
         standout="bg-teal text-white"
         v-model="password"
         label="Password"
-        :rules="[passwordRule]"
       >
         <template v-slot:append>
           <q-icon
@@ -65,6 +72,7 @@ export default {
     return {
       email: '',
       password: '',
+      username: '',
       passwordVisible: false,
       msg:"Signing up..."
     };
@@ -106,6 +114,8 @@ export default {
           const data = {
             email: this.email,
             uid: res.user.uid,
+            username:this.username,
+            image:"#"
           };
           try {
             this.msg = "Signing in..."

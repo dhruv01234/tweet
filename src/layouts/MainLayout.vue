@@ -10,7 +10,6 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-
         <q-toolbar-title> Tweet me </q-toolbar-title>
 
         <div>
@@ -19,15 +18,22 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
+    <q-drawer class="bg-blue" v-model="leftDrawerOpen" show-if-above bordered>
+      <q-list class="q-pa-sm"  v-if="user">
+        <div class="text-center">
+          <q-avatar class="avatar q-ma-sm " color="primary" size="lg" style="width: 50px; margin: 0 auto;">
+            <img src="../assets/avatar.jpg" />
+          </q-avatar>
+          <q-card class="profile q-pa-sm q-ma-sm">{{ username }}</q-card>
+          <q-item-label header> <q-btn color="amber" label="Your Profile" to="/profile"></q-btn> </q-item-label>
+        </div>
+        <hr class="seperator">
+        <q-card @click="home" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'home' }">Dashboard</q-card>
+        <q-card @click="followers" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'followers' }">Your Followers</q-card>
+        <q-card @click="mytweets" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'myTweets' }">Your Tweeets</q-card>
+      </q-list>
+      <q-list v-else>
+        <!-- Rest of the code -->
       </q-list>
     </q-drawer>
 
@@ -38,37 +44,63 @@
 </template>
 
 <script>
-import {auth} from '../firebase'
+import {auth,app} from '../firebase'
 import { signOut } from 'firebase/auth';
-import { defineComponent, ref } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
+import { getDatabase,ref,onValue } from 'firebase/database';
+import { defineComponent, ref as r } from "vue";
 
-const linksList = [
-  {
-    title: "Quasar Awesome",
-    caption: "Community Quasar projects",
-    icon: "favorite",
-    link: "https://awesome.quasar.dev",
-  },
-];
 
 export default defineComponent({
   name: "MainLayout",
-
-  components: {
-    EssentialLink,
-  },
   data() {
     return {
       user: null,
+      username:"",
+      active:"home",
     };
   },
-  mounted(){
-    auth.onAuthStateChanged(user=>{
+  mounted() {
+    auth.onAuthStateChanged(async (user) => {
       this.user = user;
-    })
+      if (user) {
+         this.fetchUsername(user.uid);
+      }
+    });
+    this.updateActiveTab(this.$route.path);
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.updateActiveTab(to.path);
+    next();
   },
   methods:{
+    updateActiveTab(path) {
+      if (path === '/') {
+        this.active = 'home';
+      } else if (path === '/mytweets') {
+        this.active = 'myTweets';
+      } else {
+        this.active = 'followers';
+      }
+    },
+     fetchUsername(userId) {
+      const db = getDatabase(app);
+      const userRef = ref(db, 'users/' + userId + '/username');
+       onValue(userRef, (snapshot) => {
+        this.username = snapshot.val();
+      });
+    },
+    home(){
+      this.active = 'home'
+      this.$router.push('/')
+    },
+    followers(){
+      this.active = 'followers';
+      this.$router.push('/followers')
+    },
+    mytweets(){
+      this.active = 'myTweets';
+      this.$router.push('/mytweets')
+    },
     alert (err) {
       // const $q = useQuasar()
       this.$q.dialog({
@@ -97,10 +129,9 @@ export default defineComponent({
     },
   },
   setup() {
-    const leftDrawerOpen = ref(false);
+    const leftDrawerOpen = r(false);
 
     return {
-      essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
@@ -109,3 +140,29 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.drawer-items.active {
+  background-color: #1976D2;
+  color: aliceblue;
+}
+.avatar{
+  width:100%;
+  height: 100%;
+}
+.profile{
+
+}
+
+.drawer-items:hover{
+  transition: 1s;
+  cursor: pointer;
+  background-color: #1976D2;
+  color: aliceblue;
+}
+.seperator{
+  width: 100%;
+  height: 2px;
+  color: aliceblue;
+}
+</style>
