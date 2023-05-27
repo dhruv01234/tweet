@@ -34,7 +34,6 @@
       />
       <q-toolbar-title> Tweet me </q-toolbar-title>
     </q-toolbar>
-<q-scroll-area class="fit">
   <q-list class="q-pa-sm absolute-top"  v-if="user">
     <q-img class="" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
       <div class="absolute-bottom bg-transparent">
@@ -58,7 +57,6 @@
     <q-card class="q-pa-sm"><q-btn class="full" color="amber" label="Sign up" to="/page/register"></q-btn></q-card>
 
   </q-list>
-</q-scroll-area>
     </q-drawer>
 
     <q-page-container>
