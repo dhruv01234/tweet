@@ -1,17 +1,13 @@
 <template>
   <q-page v-if="!loadingDialog" class="flex">
-    <div class="logout-details" v-if="!user">
-      <p>Please sign in to join the conversation</p>
-      <q-btn color="amber" label="Sign in" to="/page/login"></q-btn>
-    </div>
-    <div v-else class="body">
+    <div  class="body">
       <div v-if="Tweets" class="Tweets">
         <div v-for="tweet in Tweets" :key="tweet.id" class="tweet-card">
           <TweetCard :tweet=tweet />
         </div>
       </div>
       <div v-else>No Tweets yet</div>
-      <q-footer class="footer">
+      <q-footer v-if="user" class="footer">
         <div class="sendTweet">
           <q-input
             rounded
@@ -74,9 +70,12 @@ export default defineComponent({
     auth.onAuthStateChanged(user=>{
       this.user = user;
       this.loadingDialog = false;
-      if(user){
+      // if(user){
         this.fetchTweets();
-      }
+        if(user){
+          this.getusername();
+        }
+      // }
     })
   },
   methods:{
@@ -87,6 +86,9 @@ export default defineComponent({
       onSnapshot(q, (snapshot) => {
         this.Tweets = snapshot.docs.map((doc) => doc.data());
       });
+
+    },
+    getusername(){
       const db1 = getDatabase(app);
       const userRef = ref(db1, 'users/' + this.user.uid + '/username');
        onValue(userRef, (snapshot) => {
@@ -194,7 +196,7 @@ export default defineComponent({
     display: flex;
     width: 80%;
     flex-wrap: wrap;
-    
+
   }
   @media (max-width: 450px) {
 

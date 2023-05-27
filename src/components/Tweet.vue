@@ -19,9 +19,9 @@
           <p>{{ tweet.content }}</p>
         </div>
         <div class="tweet-footer flex">
-          <div class="tweet-likes">
-            <div>
-              <q-btn v-if="this.$route.path!=='/mytweets'"
+          <div v-if="user" class="tweet-likes">
+            <div >
+              <q-btn v-if="this.$route.path!==`/mytweets`"
                 round
                 dense
                 flat
@@ -31,7 +31,7 @@
                 :class="{'disabled':isActionInProgress}"
               />
             </div>
-            <div>
+            <div v-if="this.$route.path!==`/mytweets`">
               <p>{{ tweet.likes }}</p>
             </div>
           </div>
@@ -70,10 +70,8 @@ export default {
   props: {
     tweet: Object,
   },
-  async mounted() {
-    auth.onAuthStateChanged((user) => {
-      this.user = user.uid;
-    });
+  async mounted(){
+    this.user = auth.currentUser;
     await this.fetchUserLikedTweets();
   },
  methods:{
@@ -155,6 +153,7 @@ export default {
 // },
 async fetchUserLikedTweets() {
   const currentUser = auth.currentUser;
+  this.user = currentUser;
   if (currentUser) {
     const db = getFirestore(app);
     const userLikedTweetsRef = collection(db, 'users', currentUser.uid, 'likedTweets');

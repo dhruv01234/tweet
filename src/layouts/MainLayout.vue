@@ -41,7 +41,7 @@
           <img src="../assets/avatar.jpg">
         </q-avatar>
         <div class="text-weight-bold">{{username}}</div>
-        <div><q-btn color="amber" label="Your Profile" to="/profile"></q-btn></div>
+        <div><q-btn color="amber" label="Your Profile" :to=user.uid></q-btn></div>
       </div>
     </q-img>
     <hr class="seperator">
@@ -78,7 +78,7 @@ export default defineComponent({
     return {
       user: null,
       username:"",
-      active:"home",
+      active:"",
     };
   },
   mounted() {
@@ -100,9 +100,10 @@ export default defineComponent({
         this.active = 'home';
       } else if (path === '/mytweets') {
         this.active = 'myTweets';
-      } else {
+      } else if(path==='/followers') {
         this.active = 'followers';
       }
+      else this.active = ""
     },
      fetchUsername(userId) {
       const db = getDatabase(app);

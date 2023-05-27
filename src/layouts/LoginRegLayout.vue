@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <div class="avatar-container desktop-only">
+    <div class="avatar-container">
       <img src="../assets/loginavatar.png"/>
     </div>
    <div class="form">
