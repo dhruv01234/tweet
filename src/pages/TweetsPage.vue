@@ -7,7 +7,7 @@
     <div v-else class="body">
       <div v-if="Tweets" class="Tweets">
         <div v-for="tweet in Tweets" :key="tweet.id" class="tweet-card">
-          <TweetCard :tweet = tweet />
+          <TweetCard :tweet=tweet />
         </div>
       </div>
       <div v-else>No Tweets yet</div>
@@ -19,6 +19,7 @@
           label="Tweet here"
           class="tweetbox"
           style="width:80%"
+          @keydown.enter="sendTweet"
         >
           <template v-slot:before>
             <q-avatar>
@@ -49,7 +50,7 @@ import TweetCard from '../components/Tweet.vue'
 import { defineComponent } from 'vue'
 import {auth,app} from '../firebase'
 import { getDatabase ,ref,onValue} from 'firebase/database';
-import {getFirestore,runTransaction,doc,collection, query, orderBy, onSnapshot} from 'firebase/firestore'
+import {getFirestore,runTransaction,doc,collection, query, orderBy, onSnapshot,getDoc} from 'firebase/firestore'
 export default defineComponent({
   name: 'TweetPage',
   components:{
@@ -106,7 +107,7 @@ export default defineComponent({
     const zone = time[2].split(' ')[1]
     const hoursmin = time[0]+":"+time[1]+" "+zone
     const date =hoursmin+" " +currentDate.toLocaleDateString()
-    console.log(date)
+
     const newTweet = {
       author:this.user.uid,
       username:this.username,

@@ -1,9 +1,9 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex">
     <div class="body">
       <div v-if="Tweets.length > 0" class="Tweets">
         <div v-for="tweet in Tweets" :key="tweet.id" class="tweet-card">
-          <TweetCard :tweet="tweet" />
+          <TweetCard :tweet="tweet" @tweet-deleted="handleTweetDeleted" />
         </div>
       </div>
       <div v-else>No Tweets yet</div>
@@ -40,7 +40,12 @@ export default defineComponent({
       }
     })
   },
+
   methods: {
+    handleTweetDeleted(tweetId) {
+      this.Tweets = this.Tweets.filter(tweet => tweet.id !== tweetId);
+    },
+   
     fetchTweets() {
       const db = getFirestore(app);
       const userRef = doc(db, 'users', this.user.uid);
@@ -54,6 +59,25 @@ export default defineComponent({
 
     }
     },
+    async deleteTweet(tweet){
+    try{
+      const db = getFirestore(app)
+      const tweetRef = doc(db,'tweets',tweet.id);
+      await deleteDoc(tweetRef);
+      const userRef = doc(db,'users',tweet.author);
+      const userSnap = await getDoc(userRef);
+      const userData = userSnap.data();
+      const updatedTweets = userData.tweets.filter((t) => t.id !== tweet.id);
+    await updateDoc(userRef, { tweets: updatedTweets });
+        this.$q.notify({
+          message:'Deleted successfully',
+          color:'blue'
+        })
+    }
+    catch(err){
+      console.log(err.message)
+    }
+  }
   },
   beforeRouteEnter(to, from, next) {
     auth.onAuthStateChanged(user => {
