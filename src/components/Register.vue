@@ -31,7 +31,8 @@
       >
         <template v-slot:append>
           <q-icon
-            name="visibility"
+          v-if="checkpass()"
+          :name="passwordVisible?'visibility':'visibility_off'"
             class="cursor-pointer"
             @click="togglePasswordVisibility"
           />
@@ -86,7 +87,9 @@ export default {
     togglePasswordVisibility() {
       this.passwordVisible = !this.passwordVisible;
     },
-
+    checkpass() {
+      return this.password.length !== 0;
+    },
 
   alert (err) {
       // const $q = useQuasar()

@@ -18,7 +18,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer class="bg-blue" v-model="leftDrawerOpen" show-if-above bordered>
+    <q-drawer class="bg-blue q-pa-xs" v-model="leftDrawerOpen" show-if-above bordered>
       <q-list class="q-pa-sm"  v-if="user">
         <div class="text-center">
           <q-avatar class="avatar q-ma-sm " color="primary" size="lg" style="width: 50px; margin: 0 auto;">
@@ -33,6 +33,10 @@
         <q-card @click="mytweets" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'myTweets' }">Your Tweeets</q-card>
       </q-list>
       <q-list v-else>
+        <br>
+        <q-card class="q-pa-sm"><q-btn class="full" color="amber" label="Sign in" to="/page/login"></q-btn></q-card>
+        <br>
+        <q-card class="q-pa-sm"><q-btn class="full" color="amber" label="Sign up" to="/page/register"></q-btn></q-card>
         <!-- Rest of the code -->
       </q-list>
     </q-drawer>
@@ -142,6 +146,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.full{
+  width: 100%;
+}
 .drawer-items.active {
   background-color: #1976D2;
   color: aliceblue;

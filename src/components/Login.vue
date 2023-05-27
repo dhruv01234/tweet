@@ -13,8 +13,8 @@
         label="Password"
       >
         <template v-slot:append>
-          <q-icon
-            name="visibility"
+          <q-icon v-if="checkpass()"
+            :name="passwordVisible?'visibility':'visibility_off'"
             class="cursor-pointer"
             @click="togglePasswordVisibility"
           />
@@ -57,6 +57,9 @@ export default {
     }
   },
   methods: {
+    checkpass() {
+      return this.password.length !== 0;
+    },
     togglePasswordVisibility() {
       this.passwordVisible = !this.passwordVisible;
     },
