@@ -15,8 +15,8 @@
             v-model="tweet"
             label="Tweet here"
             class="tweetbox"
+            autogrow
             style="width:80%"
-            @keydown.enter="sendTweet"
           >
             <template v-slot:before>
               <q-avatar>
@@ -110,7 +110,7 @@ export default defineComponent({
     const time =currentDate.toLocaleTimeString().split(':')
     const zone = time[2].split(' ')[1]
     const hoursmin = time[0]+":"+time[1]+" "+zone
-    const date =hoursmin+" " +currentDate.toLocaleDateString()
+    const date =currentDate.toLocaleDateString() + " "+hoursmin
 
     const newTweet = {
       author:this.user.uid,
@@ -159,8 +159,10 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: center;
 }
-.tweetbox{
-
+.tweetbox {
+  line-height: 1;
+  overflow-y: auto;
+  max-height: 8em;
 }
   .tweet-card {
     margin: 10px;
@@ -188,6 +190,18 @@ export default defineComponent({
     padding: 5%;
     max-width: 100%;
     overflow-x: hidden;
+    margin-top: -16px;
+  }
+  .sendTweet .avatar-container {
+    flex: 0 0 auto;
+  }
+
+  .sendTweet .input-container {
+    flex: 1 1 auto;
+  }
+
+  .sendTweet .send-button-container {
+    flex: 0 0 auto;
   }
   .send:hover {
     color: #1976d2;
@@ -196,7 +210,11 @@ export default defineComponent({
     display: flex;
     width: 80%;
     flex-wrap: wrap;
+    align-items: center;
 
+  }
+  .q-page-container{
+    padding-bottom: 70px;
   }
   @media (max-width: 450px) {
 
@@ -204,4 +222,8 @@ export default defineComponent({
       width: 100%;
     }
   }
+  .search-bar-container {
+    margin-top: -15px;
+  }
+
 </style>

@@ -13,7 +13,7 @@
         <q-toolbar-title> Tweet me </q-toolbar-title>
 
         <div class="hide">
-          <q-btn v-if="user" @click="logout" color="amber" label="Logout"></q-btn>
+          <q-btn class="rounded-borders" v-if="user" @click="logout" color="amber" label="Logout"></q-btn>
         </div>
       </q-toolbar>
     </q-header>
@@ -46,7 +46,6 @@
     </q-img>
     <hr class="seperator">
     <q-card @click="home" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'home' }">Dashboard</q-card>
-    <q-card @click="followers" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'followers' }">Your Followers</q-card>
     <q-card @click="mytweets" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'myTweets' }">Your Tweeets</q-card>
     <q-card class="q-pa-sm q-ma-sm drawer-items limit"><q-btn class="full" color="amber" label="Logout" to="/page/register"></q-btn></q-card>
   </q-list>
@@ -100,8 +99,6 @@ export default defineComponent({
         this.active = 'home';
       } else if (path === '/mytweets') {
         this.active = 'myTweets';
-      } else if(path==='/followers') {
-        this.active = 'followers';
       }
       else this.active = ""
     },
@@ -116,10 +113,7 @@ export default defineComponent({
       this.active = 'home'
       this.$router.push('/')
     },
-    followers(){
-      this.active = 'followers';
-      this.$router.push('/followers')
-    },
+
     mytweets(){
       this.active = 'myTweets';
       this.$router.push('/mytweets')

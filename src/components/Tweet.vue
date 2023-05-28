@@ -1,56 +1,57 @@
 <template>
   <div class="">
-    <q-card class="tweetcard q-pa-md">
-      <div class="sender">
-        <div>
-          <div class="tweet-avatar">
-            <q-avatar>
-              <img src="../assets/avatar.jpg" />
-            </q-avatar>
-          </div>
-          <div class="tweet-author">
-            <p>{{ tweet.username }}</p>
-          </div>
+    <q-card class="my-card" bordered>
+      <div class="tweet-author">
+        <div class="tweet-avatar">
+          <q-avatar>
+            <img src="../assets/avatar.jpg" />
+          </q-avatar>
         </div>
+        <div class="q-pa-xs"><p>{{ tweet.username }}</p></div>
       </div>
-      <div class="vertical"></div>
-      <div class="content">
-        <div class="tweet-message">
-          <p>{{ tweet.content }}</p>
-        </div>
-        <div class="tweet-footer flex">
-          <div v-if="user" class="tweet-likes">
-            <div >
-              <q-btn v-if="this.$route.path!==`/mytweets`"
-                round
-                dense
-                flat
-                :icon="getLikeIcon(tweet.id)"
-                class="like-button"
-                @click="likeTweet(tweet)"
-                :class="{'disabled':isActionInProgress}"
-              />
-            </div>
-            <div v-if="this.$route.path!==`/mytweets`">
-              <p>{{ tweet.likes }}</p>
-            </div>
-          </div>
-          <div class="tweet-time flex items-end">
-            <p>{{tweet.date}}</p>
-          </div>
-        </div>
-      </div>
-      <q-btn
-      v-if="user===tweet.author"
-        round
-        dense
-        flat
-        icon="delete"
-        class="delete-button"
-        @click="deleteTweet(tweet)"
-      />
-    </q-card>
+      <q-card-section horizontal>
+        <q-card-section class="q-pt-xs content">
 
+          <div class="text-h7 tweet-content">{{tweet.content}}</div>
+
+        </q-card-section>
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-actions class="tweetcard">
+        <div class="tweet-likes">
+          <div v-if="this.$route.path!==`/mytweets`" class="like-button">
+            <q-btn
+              round
+              dense
+              flat
+              :icon="getLikeIcon(tweet.id)"
+              @click="likeTweet(tweet)"
+              :class="{'disabled':isActionInProgress}"
+            />
+           <div class="likes-count">
+            <p>{{ tweet.likes }} Likes</p>
+           </div>
+          </div>
+          <div v-if="user">
+            <q-btn
+          v-if="user===tweet.author"
+          round
+          dense
+          flat
+          icon="delete"
+          class="delete-button"
+          @click="deleteTweet(tweet)"
+        />
+          </div>
+        </div>
+        <div class="text-caption text-grey">
+          {{tweet.date}}
+        </div>
+
+      </q-card-actions>
+    </q-card>
   </div>
 </template>
 
@@ -71,11 +72,19 @@ export default {
     tweet: Object,
   },
   async mounted(){
-    this.user = auth.currentUser;
+    if(auth.currentUser){
+    this.user = auth.currentUser.uid;
     await this.fetchUserLikedTweets();
+    }
   },
  methods:{
   async likeTweet(tweet) {
+    if(!this.user){
+      this.$q.dialog({
+        message:'Please Sign in to continue'
+      })
+      return;
+    }
     if (this.isActionInProgress) {
       return;
     }
@@ -141,19 +150,8 @@ export default {
         })
     }
   },
-//   async LikedOrNot(){
-//   const currentUser = auth.currentUser;
-//   const db = getFirestore(app);
-//   const userRef = doc(db, 'users', currentUser.uid);
-//   const userLikedTweetsRef = doc(userRef, 'likedTweets', this.$props.tweet.id);
-//   const userLikedTweetsDoc = await getDoc(userLikedTweetsRef);
-//   // console.log(userLikedTweetsDoc.exists())
-//   return userLikedTweetsDoc.exists()
-
-// },
 async fetchUserLikedTweets() {
   const currentUser = auth.currentUser;
-  this.user = currentUser;
   if (currentUser) {
     const db = getFirestore(app);
     const userLikedTweetsRef = collection(db, 'users', currentUser.uid, 'likedTweets');
@@ -169,45 +167,27 @@ getLikeIcon(tweetId) {
           : 'favorite_border';
     },
  },
- computed: {
-    // likeIcon() {
-    //   console.log(this.LikedOrNot())
-    //   return this.userLikedTweets.includes(tweetId)
-    //       ? 'favorite'
-    //       : 'favorite_border';
-    // },
-  },
 
 };
 </script>
 
 <style scoped>
+.tweet-content {
+  white-space: pre-wrap;
+}
 .disabled {
   cursor: pointer !important;
-}
-
-.vertical {
-  display: inline-block;
-  border-left: 1px solid yellow;
-  height: 100%;
 }
 .tweetcard {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin-top: -8px;
+  margin-bottom: -8px;
 }
 .tweet-likes {
   display: flex;
-  align-items: baseline;
-}
-.sender {
-  width: 12%;
-  border-right: 2px solid #c7e0f9;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
+  height: fit-content;
 }
 
 .content {
@@ -217,29 +197,28 @@ getLikeIcon(tweetId) {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #1976d2;
+  background-color: #F3F5F7;
   margin-left: 5px;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  text-align: center;
-}
-.tweet-footer {
-  background-color: #e7ecf691;
-  display: flex;
-  justify-content: space-between;
-  height: max-content;
-  padding: 5px;
-  margin-top: auto;
 }
 .tweet-author {
   overflow-wrap: break-word;
   word-wrap: break-word;
   word-break: break-word;
-  max-width: 100%;
-  margin: auto;
+  width: max-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.delete-button {
-  align-self: flex-end;
-  margin-top: auto;
+.likes-count{
+margin-left: 5px;
+}
+.likes-count p{
+margin: 0;
+}
+.like-button{
+  display: flex;
+  align-items: center;
 }
 </style>

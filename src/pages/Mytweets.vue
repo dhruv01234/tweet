@@ -52,11 +52,16 @@ export default defineComponent({
       try{
       runTransaction(db,async(transaction)=>{
         const userSnapshot = await transaction.get(userRef);
-        this.Tweets=userSnapshot.data().tweets
+        const sortedTweets=userSnapshot.data().tweets
+        this.Tweets = sortedTweets.sort((a, b) => b.timestamp - a.timestamp);
       })
+
     }
     catch(err){
-
+      console.log(err)
+      this.$q.notify({
+        message:'Error occured'
+      })
     }
     },
     async deleteTweet(tweet){
@@ -110,5 +115,6 @@ export default defineComponent({
   .tweet-card {
     margin: 10px;
     width: 100%;
+    white-space: pre-wrap;
   }
 </style>
