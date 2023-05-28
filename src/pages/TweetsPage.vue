@@ -16,6 +16,8 @@
             label="Tweet here"
             class="tweetbox"
             autogrow
+            autofocus
+            ref="tweetInput"
             style="width:80%"
           >
             <template v-slot:before>
@@ -137,6 +139,9 @@ export default defineComponent({
   })
     .then(() => {
       this.tweet = "";
+      this.$nextTick(() => {
+            this.$refs.tweetInput.focus();
+          });
     })
     .catch((error) => {
       this.loadingsend = false

@@ -136,8 +136,8 @@ export default {
       const userSnap = await getDoc(userRef);
       const userData = userSnap.data();
       const updatedTweets = userData.tweets.filter((t) => t.id !== tweet.id);
-    await updateDoc(userRef, { tweets: updatedTweets });
-    this.$emit('tweet-deleted', tweet.id);
+      await updateDoc(userRef, { tweets: updatedTweets });
+      this.$emit('tweet-deleted', tweet.id);
         this.$q.notify({
           message:'Deleted successfully',
           color:'blue'
