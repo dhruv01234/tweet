@@ -47,7 +47,7 @@
     <hr class="seperator">
     <q-card @click="home" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'home' }">Dashboard</q-card>
     <q-card @click="mytweets" class="drawer-items q-pa-sm q-ma-sm" :class="{ active: active === 'myTweets' }">Your Tweeets</q-card>
-    <q-card class="q-pa-sm q-ma-sm drawer-items limit"><q-btn class="full" color="amber" label="Logout" to="/page/register"></q-btn></q-card>
+    <q-card class="q-pa-sm q-ma-sm drawer-items limit"><q-btn class="full" color="amber" label="Logout" @click="logout"></q-btn></q-card>
   </q-list>
   <q-list v-else>
     <br>

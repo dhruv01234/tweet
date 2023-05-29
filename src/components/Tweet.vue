@@ -89,7 +89,6 @@ export default {
   },
  methods:{
   checkContentOverflow(content){
-    console.log(content.slice(0,300))
     if(content!==content.slice(0,300)){
       this.readMoreBtnActive = true
       return true

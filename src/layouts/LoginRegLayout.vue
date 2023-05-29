@@ -28,7 +28,7 @@ img{
   padding: 0px;
   background-image: url('../assets/loginbg.avif');
   background-size: cover;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
   height: 100vh;
   width: 100%;
   display: flex;
