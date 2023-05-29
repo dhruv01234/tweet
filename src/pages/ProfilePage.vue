@@ -8,14 +8,12 @@
           <div class="text-subtitle2">{{ email }}</div>
         </q-card-section>
       </q-card>
-      <q-input @change="getImage" type="file"></q-input>
     </div>
   </q-page>
 </template>
 
 <script>
 import { getDatabase, ref, onValue, set } from 'firebase/database';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { defineComponent } from 'vue';
 import { auth, app } from '../firebase';
 
@@ -48,26 +46,6 @@ export default defineComponent({
         this.imageUrl = userData.image;
       });
     },
-    getImage(file){
-
-    },
-    uploadImage(file) {
-console.log(file)
-    },
-
-
-    updateProfileImage(url) {
-      const db = getDatabase(app);
-      const userRef = ref(db, 'users/' + this.user.uid);
-      set(userRef, { image: url }, (error) => {
-        if (error) {
-          console.log(error);
-        } else {
-          this.imageUrl = url;
-          console.log('Profile image updated successfully.');
-        }
-      });
-    },
   },
   beforeRouteEnter(to, from, next) {
     auth.onAuthStateChanged((user) => {
@@ -84,7 +62,6 @@ console.log(file)
 <style scoped>
 .body{
   width: 90%;
-  height: 7vh;
   flex-wrap: wrap;
 }
 .profileImage {

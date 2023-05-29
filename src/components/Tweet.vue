@@ -12,9 +12,17 @@
       <q-card-section horizontal>
         <q-card-section class="q-pt-xs content">
 
-          <div class="text-h7 tweet-content">{{tweet.content}}</div>
-
+          <div v-if="checkContentOverflow(tweet.content) && !redMoreActive" class="text-h7 tweet-content">
+            {{(tweet.content).slice(0, 300)}}...
+          </div>
+          <div v-else class="text-h7 tweet-content">
+            {{(tweet.content)}}
+          </div>
+          <div v-if="readMoreBtnActive" class="read-more">
+            <q-btn @click="redMoreActive=!redMoreActive" color="blue" :label="redMoreActive?'Read less':'Read more'"></q-btn>
+          </div>
         </q-card-section>
+
       </q-card-section>
 
       <q-separator />
@@ -65,7 +73,9 @@ export default {
       user:null,
       isActionInProgress: false,
       userLikedTweets: [],
-      likeIcon:''
+      likeIcon:'',
+      redMoreActive:false,
+      readMoreBtnActive:false,
     }
   },
   props: {
@@ -78,6 +88,14 @@ export default {
     }
   },
  methods:{
+  checkContentOverflow(content){
+    console.log(content.slice(0,300))
+    if(content!==content.slice(0,300)){
+      this.readMoreBtnActive = true
+      return true
+    }
+    return false
+  },
   async likeTweet(tweet) {
     if(!this.user){
       this.$q.dialog({
@@ -174,6 +192,8 @@ getLikeIcon(tweetId) {
 <style scoped>
 .tweet-content {
   white-space: pre-wrap;
+
+
 }
 .disabled {
   cursor: pointer !important;
@@ -188,6 +208,7 @@ getLikeIcon(tweetId) {
 .tweet-likes {
   display: flex;
   height: fit-content;
+
 }
 
 .content {
@@ -202,6 +223,14 @@ getLikeIcon(tweetId) {
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
+.content.expand {
+  max-height: none;
+}
+
+.tweet-content.show-more {
+  white-space: normal;
+}
+
 .tweet-author {
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -220,5 +249,10 @@ margin: 0;
 .like-button{
   display: flex;
   align-items: center;
+}
+.read-more{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 </style>

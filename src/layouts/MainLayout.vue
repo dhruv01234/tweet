@@ -35,7 +35,7 @@
       <q-toolbar-title> Tweet me </q-toolbar-title>
     </q-toolbar>
   <q-list class="q-pa-sm absolute-top"  v-if="user">
-    <q-img class="" src="https://cdn.quasar.dev/img/material.png" style="height: 150px">
+    <q-img class="" src="../assets/profilebg.png" style="height: 150px">
       <div class="absolute-bottom bg-transparent">
         <q-avatar size="56px" class="q-mb-sm">
           <img src="../assets/avatar.jpg">
